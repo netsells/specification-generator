@@ -11,6 +11,7 @@ abstract class SpecificationParser
     protected $spec;
 
     abstract protected function getModelsFromSpecification(): array;
+    abstract protected function getModelParser();
 
     public function __construct($file)
     {
@@ -32,8 +33,9 @@ abstract class SpecificationParser
      */
     protected function parseModels($schemas): \Generator
     {
+        $modelParser = $this->getModelParser();
         foreach ($schemas as $modelName => $modelSpec) {
-            yield (new ModelParser($modelName, $modelSpec))->parse();
+            yield (new $modelParser($modelName, $modelSpec))->parse();
         }
     }
 }

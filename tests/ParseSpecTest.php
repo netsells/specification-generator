@@ -4,14 +4,14 @@ namespace Juddling\OpenApiLaravel\Tests;
 
 use Juddling\OpenApiLaravel\DataType;
 use Juddling\OpenApiLaravel\Parsers\OpenApiParser;
+use Juddling\OpenApiLaravel\Parsers\SwaggerParser;
 use PHPUnit\Framework\TestCase;
 
 class ParseSpecTest extends TestCase
 {
-    public function testReadSpecTest()
+    public function testOpenApiSpec()
     {
-        $file = __DIR__ . '/openapi/spec.yaml';
-        $parser = new OpenApiParser($file);
+        $parser = new OpenApiParser(__DIR__ . '/openapi/spec.yaml');
         $models = $parser->models();
         $this->assertCount(2, $models);
 
@@ -28,5 +28,12 @@ class ParseSpecTest extends TestCase
     {
         $this->expectException(\UnexpectedValueException::class);
         new DataType('some-invalid-type');
+    }
+
+    public function testSwaggerSpec()
+    {
+        $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto.yaml');
+        $models = $parser->models();
+        $this->assertCount(5, $models);
     }
 }

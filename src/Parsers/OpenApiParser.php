@@ -14,4 +14,9 @@ class OpenApiParser extends SpecificationParser
 
         return $components['schemas'];
     }
+
+    protected function getModelParser()
+    {
+        return ModelParser::class;
+    }
 }

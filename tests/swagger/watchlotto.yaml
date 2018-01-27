@@ -1,0 +1,353 @@
+swagger: "2.0"
+info:
+  version: MVP
+  title: "Watchlotto"
+  description: |
+    This is the documentation for the Watchlotto API. The
+    API requires authentication and API credentials are only available to first-party clients at this moment in time.
+    
+    **Note:** *all responses are nested in a `data` key. This has been removed from examples below to keep things simple.*
+  
+  contact:
+    name: Netsells
+    email: sam@netsells.co.uk
+    url: https://netsells.co.uk
+host: watchlotto.com
+basePath: /api
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  oAuthClient:
+    type: oauth2
+    flow: application
+    tokenUrl: 'https://watchlotto.com/oauth/token'
+    scopes: {}
+  oAuthUser:
+    type: oauth2
+    flow: password
+    tokenUrl: 'https://watchlotto.com/oauth/token'
+    scopes: {}
+  
+paths:
+  /register:
+    post:
+      tags: 
+        - Auth
+      summary: Register a user
+      operationId: registerUser
+      security:
+        - oAuthClient: []
+      parameters:
+        - in: body
+          required: true
+          name: user
+          schema:
+            $ref: '#/definitions/RegistrationUser'
+      responses:
+        201:
+          description: User registered
+          schema:
+            $ref: '#/definitions/User'
+  /reset-password:
+    post:
+      tags: 
+        - Auth
+      summary: Initiates a password reset
+      operationId: resetPassword
+      security:
+        - oAuthClient: []
+      parameters:
+        - in: body
+          required: true
+          name: email
+          schema:
+            type: object
+            properties:
+              email:
+                $ref: '#/definitions/Email'
+      responses:
+        200:
+          description: Password reset email sent
+  /reset-password/{token}:
+    post:
+      tags: 
+        - Auth
+      summary: Completes a password reset
+      operationId: completeResetPassword
+      security:
+        - oAuthClient: []
+      parameters:
+        - in: path
+          required: true
+          name: token
+          type: string
+        - in: body
+          required: true
+          name: password
+          schema:
+            type: object
+            properties:
+              password:
+                $ref: '#/definitions/Password'
+      responses:
+        200:
+          description: Password has been reset
+  /game:
+    get:
+      tags:
+        - Game
+      responses:
+        200:
+          description: The current game
+          schema:
+            $ref: '#/definitions/Game'
+  /game/{id}/watches:
+    parameters: 
+      - in: path
+        required: true
+        name: id
+        description: The game ID
+        type: string
+    get:
+      tags:
+        - Game
+      responses:
+        200:
+          description: The watches for the specified game
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Watch'
+  /me/cards:
+    get:
+      tags:
+        - User
+        - Cards
+      summary: Returns the cards owned by the user
+      security:
+        - oAuthUser: []
+      responses:
+        200:
+          description: The user's cards
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Card'
+    post:
+      tags:
+        - User
+        - Cards
+      summary: Adds a new card to the user's account
+      security:
+        - oAuthUser: []
+      parameters: 
+        - in: body
+          name: card
+          schema:
+            $ref: '#/definitions/Card'
+      responses:
+        201:
+          description: Card added
+          schema:
+            $ref: '#/definitions/Card'
+  /me/cards/{cardId}:
+    parameters: 
+      - in: path
+        required: true
+        name: cardId
+        description: The card ID
+        type: string
+    delete:
+      tags:
+        - User
+        - Cards
+      summary: Delete a card
+      security: 
+        - oAuthUser: []
+      responses:
+        200:
+          description: Card deleted
+  /me/profile:
+    put:
+      tags: 
+        - User
+      summary: Uploads the user's profile photo
+      description: The body of this request should be the file to upload and the content type set to the file's content type. Not what you see below (thanks openapi v2...)
+      operationId: uploadProfile
+      security:
+        - oAuthUser: []
+      consumes:
+        - multipart/form-data
+        - image/jpeg
+      parameters:
+        - in: formData
+          required: true
+          type: file
+          name: file
+      responses:
+        200:
+          description: Profile image accepted
+          schema:
+            $ref: '#/definitions/User'
+  /me/notification-settings:
+    get:
+      tags: 
+        - User
+      summary: Fetches all user's notification preferences
+      operationId: notificationPreferences
+      security:
+        - oAuthUser: []
+      responses:
+        200:
+          description: Notification settings updated
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
+    patch:
+      tags: 
+        - User
+      summary: Updates the user's notification preferences
+      operationId: updateNotificationPreferences
+      security:
+        - oAuthUser: []
+      parameters:
+        - in: body
+          name: settings
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
+      responses:
+        200:
+          description: Notification settings updated
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/NotificationSetting'
+definitions:
+  Game:
+    description: A game
+    type: object
+    properties:
+      id:
+        type: string
+        example: '25154843-3bae-4028-a9f5-daca753e49ff'
+      name:
+        type: string
+        example: January
+      starts_at:
+        type: string
+        example: '2018-01-01 00:00:00'
+      ends_at:
+        type: string
+        example: '2018-02-01 00:00:00' 
+  Watch:
+    description: A watch
+    type: object
+    properties:
+      id:
+        type: string
+        example: '25154843-3bae-4028-a9f5-daca753e49ff'
+      name:
+        type: string
+        example: 'Rolex Submariner'
+      description:
+        type: string
+        example: 'The daddy of all watches.'
+      value:
+        type: integer
+        example: 1000000
+        description: Value in pennies
+  NotificationSetting:
+    description: A notification setting
+    type: object
+    properties:
+      key:
+        type: string
+        example: game-starting-soon
+      value:
+        example: true
+  Card:
+    description: A stripe card
+    type: object
+    properties:
+      id:
+        description: The stripe ID
+        example: card_12ek2op1ek12opke2
+        type: string
+      last_4:
+        type: string
+        example: 5229
+      brand:
+        type: string
+        example: Visa
+  Name:
+    type: object
+    properties:
+      first_name:
+        description: User first name
+        type: string
+        minLength: 1
+        example: John
+      last_name:
+        description: User last name
+        type: string
+        minLength: 1
+        example: Smith
+        
+  Password:
+    description: User password
+    type: string
+    minLength: 1
+    example: mysupersecurepassword
+    
+  Phone:
+    description: User phone number
+    type: string
+    minLength: 1
+    example: '07777777777'
+    
+  Marketing:
+    description: Has the user opted in for marketing
+    type: boolean
+    example: true
+    
+  BasicUser:
+    type: object
+    allOf:
+      - $ref: "#/definitions/Name"
+      - properties:
+          email:
+            $ref: '#/definitions/Email'
+          phone:
+            $ref: '#/definitions/Phone'
+          marketing:
+            $ref: '#/definitions/Marketing'
+      
+  RegistrationUser:
+    type: object
+    allOf:
+      - $ref: "#/definitions/BasicUser"
+      - properties:
+          password:
+            $ref: '#/definitions/Password'
+  User:
+    type: object
+    allOf:
+      - $ref: '#/definitions/BasicUser'
+      - type: object
+        properties:
+          profile_image:
+            type: string
+            example: 'https://cdn.watchlotto.com/profile/1232131.jpg'
+  Email:
+    description: User email address
+    type: string
+    format: email
+    example: john.smith@example.com
