@@ -15,7 +15,10 @@ class OpenApiParser
         $this->spec = Yaml::parseFile($this->file);
     }
 
-    public function models()
+    /**
+     * @return Model[]
+     */
+    public function models(): array
     {
         $components = $this->spec['components'];
 
@@ -23,13 +26,14 @@ class OpenApiParser
             throw new \RuntimeException("No models found in components.schemas");
         }
 
-        return $this->parseModels($components['schemas']);
+        $models = $this->parseModels($components['schemas']);
+        return iterator_to_array($models);
     }
 
     /*
      * delegate to model parser to get model instances
      */
-    private function parseModels($schemas)
+    private function parseModels($schemas): \Generator
     {
         foreach ($schemas as $modelName => $modelSpec) {
             yield (new ModelParser($modelName, $modelSpec))->parse();

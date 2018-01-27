@@ -15,6 +15,15 @@ class ModelParser
 
     public function parse()
     {
-        return new Model($this->name, $this->spec['properties']);
+        $fields = $this->parseFields($this->spec['properties']);
+        return new Model($this->name, $fields);
+    }
+
+    private function parseFields($fields)
+    {
+        foreach ($fields as $fieldName => $fieldSpec) {
+            $parser = new FieldParser($fieldName, $fieldSpec);
+            yield $parser->parse();
+        }
     }
 }

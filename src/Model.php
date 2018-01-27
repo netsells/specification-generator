@@ -12,4 +12,17 @@ class Model
         $this->name = $name;
         $this->fields = $fields;
     }
+
+    /**
+     * @return Field[]
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
 }
