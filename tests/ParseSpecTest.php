@@ -3,7 +3,7 @@
 namespace Juddling\OpenApiLaravel\Tests;
 
 use Juddling\OpenApiLaravel\DataType;
-use Juddling\OpenApiLaravel\OpenApiParser;
+use Juddling\OpenApiLaravel\Parsers\OpenApiParser;
 use PHPUnit\Framework\TestCase;
 
 class ParseSpecTest extends TestCase

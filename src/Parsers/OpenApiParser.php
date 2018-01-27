@@ -1,7 +1,8 @@
 <?php
 
-namespace Juddling\OpenApiLaravel;
+namespace Juddling\OpenApiLaravel\Parsers;
 
+use Juddling\OpenApiLaravel\Model;
 use Symfony\Component\Yaml\Yaml;
 
 class OpenApiParser
