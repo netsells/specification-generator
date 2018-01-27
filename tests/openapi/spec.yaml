@@ -1,0 +1,20 @@
+openapi: "3.0.0"
+info:
+  title: Simple API overview
+  version: v2
+components:
+  schemas:
+    Domain:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    SupplierDomain:
+      type: object
+      properties:
+        id:
+          type: integer
+        domain_id:
+          $ref: "#/components/schemes/Domain"
