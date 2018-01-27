@@ -25,6 +25,11 @@ class ModelParser
     {
         foreach ($fields as $fieldName => $fieldSpec) {
             $parser = new FieldParser($fieldName, $fieldSpec);
+
+            if (!array_key_exists('type', $fieldSpec)) {
+                continue;
+            }
+
             yield $parser->parse();
         }
     }

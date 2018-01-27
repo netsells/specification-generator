@@ -8,18 +8,24 @@ use Netsells\MigrationGenerator\MigrationBuilder;
 class MigrationGenerator implements FileGenerator
 {
     private $model;
+    private $builder;
 
     public function __construct(Model $model)
     {
         $this->model = $model;
+        $tableName = $this->tableName();
+        $migrationName = "create_{$tableName}_table";
+        $this->builder = new MigrationBuilder(iterator_to_array($this->columns()), $migrationName, $tableName);
     }
 
     public function generate()
     {
-        $tableName = $this->tableName();
-        $migrationName = 'create_{$tableName}_table';
-        $builder = new MigrationBuilder(iterator_to_array($this->columns()), $migrationName, $tableName);
-        return $builder->generate();
+        return $this->builder->generate();
+    }
+
+    public function fileName()
+    {
+        return $this->builder->fileName();
     }
 
     private function tableName()

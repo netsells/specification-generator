@@ -1,4 +1,13 @@
 {
+    "name": "juddling/specification-generator",
+    "description": "Generate Laravel migrations base on specification files",
+    "type": "library",
+    "authors": [
+        {
+            "name": "James Judd",
+            "email": "james.judd@netsells.co.uk"
+        }
+    ],
     "repositories": [
         {
             "type": "composer",
@@ -10,7 +19,8 @@
         "symfony/yaml": "^4.0",
         "myclabs/php-enum": "^1.5",
         "netsells/laravel-migration-generator": "^0.4",
-        "illuminate/support": "^5.5"
+        "illuminate/support": "^5.5",
+        "illuminate/console": "^5.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5"
@@ -25,9 +35,18 @@
             "Juddling\\OpenApiLaravel\\Tests\\": "tests"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Juddling\\OpenApiLaravel\\GeneratorServiceProvider"
+            ]
+        }
+    },
     "scripts": {
         "cs": "phpcs --standard=psr2 src/ tests/",
         "csfix": "phpcbf --standard=psr2 src/ tests/",
         "test": "phpunit"
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
