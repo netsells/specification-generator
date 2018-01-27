@@ -14,11 +14,13 @@ class Field
         $this->type = $type;
     }
 
-    /**
-     * @return DataType
-     */
-    public function getType()
+    public function getType(): DataType
     {
         return $this->type;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

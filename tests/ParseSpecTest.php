@@ -24,10 +24,9 @@ class ParseSpecTest extends TestCase
         $this->assertCount(2, $secondModel->getFields());
     }
 
-    public function testInvalidField()
+    public function testInvalidDataType()
     {
         $this->expectException(\UnexpectedValueException::class);
-
-        $type = new DataType('some-invalid-type');
+        new DataType('some-invalid-type');
     }
 }
