@@ -86,8 +86,10 @@ class ModelParser
 
     private function findParsedModel($referencedModelName): Model
     {
+        /** @var Model $model */
         foreach ($this->parsedDefinitions as $model) {
             if ($model->getName() === $referencedModelName) {
+                $model->markAsReferenced();
                 return $model;
             }
         }

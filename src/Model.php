@@ -7,6 +7,7 @@ class Model
     private $name;
     private $fields;
     private $singleField = false;
+    private $referenced = false;
 
     public function __construct($name, $fields)
     {
@@ -39,5 +40,15 @@ class Model
     public function markAsSingleField()
     {
         $this->singleField = true;
+    }
+
+    public function markAsReferenced()
+    {
+        $this->referenced = true;
+    }
+
+    public function isReferenced(): bool
+    {
+        return $this->referenced;
     }
 }

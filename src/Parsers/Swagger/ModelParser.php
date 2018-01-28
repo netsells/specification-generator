@@ -28,7 +28,7 @@ class ModelParser extends \Juddling\Parserator\Parsers\ModelParser
         }
 
         return array_filter($evaluated, function ($model) {
-            return !$model->isSingleField();
+            return !$model->isSingleField() && !$model->isReferenced();
         });
     }
 }
