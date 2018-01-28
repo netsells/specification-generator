@@ -3,17 +3,24 @@
 namespace Juddling\Parserator\Parsers;
 
 use Juddling\Parserator\Exceptions\MissingReferenceException;
+use Juddling\Parserator\Exceptions\UnparsedReferenceException;
 use Juddling\Parserator\Model;
 
 class ModelParser
 {
     private $spec;
     private $name;
+    /*
+     * Definitions which have already been parsed, these are required as Definitions can reference
+     * other Definitions
+     */
+    private $parsedDefinitions;
 
-    public function __construct($name, array $spec)
+    public function __construct($name, array $spec, $parsedDefinitions)
     {
         $this->spec = $spec;
         $this->name = $name;
+        $this->parsedDefinitions = $parsedDefinitions;
     }
 
     public function parse()
@@ -35,10 +42,12 @@ class ModelParser
 
     private function parseFields($fields)
     {
+        $parsedFields = [];
         foreach ($fields as $fieldName => $fieldSpec) {
             $parser = new FieldParser($fieldName, $fieldSpec);
-            yield $parser->parse();
+            $parsedFields[] = $parser->parse();
         }
+        return $parsedFields;
     }
 
     private function allOfModel(): Model
@@ -49,8 +58,8 @@ class ModelParser
         // each is either a $ref, or properties
         foreach ($allOf as $complexFieldSpec) {
             if (array_key_exists('properties', $complexFieldSpec)) {
-                $parsedFields = $this->parseFields($complexFieldSpec['properties']);
-                return new Model($this->name, $parsedFields);
+                $fields[] = $this->parseFields($complexFieldSpec['properties']);
+                continue;
             }
 
             if (!array_key_exists('$ref', $complexFieldSpec)) {
@@ -58,8 +67,20 @@ class ModelParser
             }
 
             $referencedModelName = self::modelNameFromRef($complexFieldSpec['$ref']);
+            $fields[] = $this->fieldsForModel($referencedModelName);
         }
 
         return new Model($this->name, $fields);
+    }
+
+    private function fieldsForModel($referencedModelName)
+    {
+        foreach ($this->parsedDefinitions as $model) {
+            if ($model->getName() === $referencedModelName) {
+                return $model->getFields();
+            }
+        }
+
+        throw new UnparsedReferenceException;
     }
 }

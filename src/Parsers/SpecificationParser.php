@@ -40,7 +40,7 @@ abstract class SpecificationParser
     {
         $modelParser = $this->getModelParser();
         foreach ($schemas as $modelName => $modelSpec) {
-            yield (new $modelParser($modelName, $modelSpec))->parse();
+            yield (new $modelParser($modelName, $modelSpec, []))->parse();
         }
     }
 }

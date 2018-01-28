@@ -19,7 +19,7 @@ class ModelParser extends \Juddling\Parserator\Parsers\ModelParser
 
             if ($specification['type'] === 'object') {
                 try {
-                    $model = (new self($name, $specification))->parse();
+                    $model = (new self($name, $specification, $evaluated))->parse();
                     $evaluated[] = $model;
                 } catch (UnparsedReferenceException $e) {
                     // this model references another model we haven't parsed yet

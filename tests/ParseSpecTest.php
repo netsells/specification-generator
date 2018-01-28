@@ -4,6 +4,7 @@ namespace Juddling\Parserator\Tests;
 
 use Juddling\Parserator\DataType;
 use Juddling\Parserator\Field;
+use Juddling\Parserator\Model;
 use Juddling\Parserator\Parsers\OpenApiParser;
 use Juddling\Parserator\Parsers\Swagger\ModelParser;
 use Juddling\Parserator\Parsers\SwaggerParser;
@@ -36,9 +37,12 @@ class ParseSpecTest extends TestCase
     {
         $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto.yaml');
         $models = $parser->models();
+        $this->assertContainsOnlyInstancesOf(Model::class, $models);
         $this->assertCount(8, $models);
 
         foreach ($models as $model) {
+            $this->assertContainsOnlyInstancesOf(Field::class, $model->getFields());
+
             switch ($model->getName()) {
                 case 'User':
                     $fields = $model->getFields();
