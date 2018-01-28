@@ -66,7 +66,7 @@ class ParseSpecTest extends TestCase
 
     public function testModelNameFromReference()
     {
-        $this->assertSame('Name', ModelParser::modelNameFromRef('#/definitions/Name'));
+        $this->assertSame('Name', SwaggerParser::modelNameFromRef('#/definitions/Name'));
     }
 
     private function assertFieldsContainsField(Field $x, $fields)

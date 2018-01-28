@@ -38,17 +38,11 @@ class ModelParser
         return new Model($this->name, $fields);
     }
 
-    public static function modelNameFromRef($reference): string
-    {
-        $startingIndex = strlen('#/definitions/');
-        return substr($reference, $startingIndex);
-    }
-
     private function parseFields($fields)
     {
         $parsedFields = [];
         foreach ($fields as $fieldName => $fieldSpec) {
-            $parser = new FieldParser($fieldName, $fieldSpec);
+            $parser = new FieldParser($fieldName, $fieldSpec, $this);
             $parsedFields[] = $parser->parse();
         }
         return $parsedFields;
@@ -69,8 +63,8 @@ class ModelParser
                 throw new MissingReferenceException("allOf has been used, but no reference has been provided in definition: {$this->name}");
             }
 
-            $referencedModelName = self::modelNameFromRef($complexFieldSpec['$ref']);
-            $this->addFields($this->fieldsForModel($referencedModelName));
+            $model = $this->getModelFromReference($complexFieldSpec['$ref']);
+            $this->addFields($model->getFields());
         }
 
         return new Model($this->name, $this->parsedFields);
@@ -86,14 +80,20 @@ class ModelParser
         }
     }
 
-    private function fieldsForModel($referencedModelName)
+    private function findParsedModel($referencedModelName): Model
     {
         foreach ($this->parsedDefinitions as $model) {
             if ($model->getName() === $referencedModelName) {
-                return $model->getFields();
+                return $model;
             }
         }
 
         throw new UnparsedReferenceException;
+    }
+
+    public function getModelFromReference($reference): Model
+    {
+        $referencedModelName = SwaggerParser::modelNameFromRef($reference);
+        return $this->findParsedModel($referencedModelName);
     }
 }

@@ -4,6 +4,12 @@ namespace Juddling\Parserator\Parsers;
 
 class SwaggerParser extends SpecificationParser
 {
+    public static function modelNameFromRef($reference): string
+    {
+        $startingIndex = strlen('#/definitions/');
+        return substr($reference, $startingIndex);
+    }
+
     protected function getModelsFromSpecification(): array
     {
         return $this->spec['definitions'];

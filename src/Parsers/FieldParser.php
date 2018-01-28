@@ -12,11 +12,13 @@ class FieldParser
 {
     private $spec;
     private $name;
+    private $modelParser;
 
-    public function __construct($name, array $spec)
+    public function __construct($name, array $spec, ModelParser $modelParser)
     {
         $this->spec = $spec;
         $this->name = $name;
+        $this->modelParser = $modelParser;
     }
 
     public function parse(): Field
@@ -35,7 +37,13 @@ class FieldParser
     private function getType(): DataType
     {
         if ($this->isReference()) {
-            return new DataType(DataType::REFERENCE);
+            $model = $this->modelParser->getModelFromReference($this->spec['$ref']);
+
+            if (count($model->getFields()) > 1) {
+                throw new \RuntimeException("Can't get the type if there is more than a single field");
+            }
+
+            return $model->getFields()[0]->getType();
         }
 
         return new DataType($this->spec['type']);
