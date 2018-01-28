@@ -73,10 +73,14 @@ class ParseSpecTest extends TestCase
     {
         foreach ($fields as $y) {
             if ($x->getName() === $y->getName()) {
-                return;
+                if ($x->getType() == $y->getType()) {
+                    return;
+                }
+
+                $this->fail("Type mismatch for field name: {$x->getName()} - expected: {$x->getType()} actual: {$y->getType()}");
             }
         }
 
-        $this->fail('Could not find field with name: ' . $x->getName());
+        $this->fail('Could not find field with name: ' . $x->getName() . ' and type: ' . $x->getType());
     }
 }
