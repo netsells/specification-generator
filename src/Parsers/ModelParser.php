@@ -1,8 +1,8 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Parsers;
+namespace Juddling\Parserator\Parsers;
 
-use Juddling\OpenApiLaravel\Model;
+use Juddling\Parserator\Model;
 
 class ModelParser
 {

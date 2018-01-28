@@ -1,8 +1,8 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Generators;
+namespace Juddling\Parserator\Generators;
 
-use Juddling\OpenApiLaravel\Model;
+use Juddling\Parserator\Model;
 use Netsells\MigrationGenerator\MigrationBuilder;
 
 class MigrationGenerator implements FileGenerator

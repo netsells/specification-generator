@@ -1,9 +1,9 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Tests;
+namespace Juddling\Parserator\Tests;
 
-use Juddling\OpenApiLaravel\Generators\MigrationGenerator;
-use Juddling\OpenApiLaravel\Parsers\OpenApiParser;
+use Juddling\Parserator\Generators\MigrationGenerator;
+use Juddling\Parserator\Parsers\OpenApiParser;
 use PHPUnit\Framework\TestCase;
 
 class GenerateMigrationTest extends TestCase

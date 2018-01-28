@@ -1,10 +1,10 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Tests;
+namespace Juddling\Parserator\Tests;
 
-use Juddling\OpenApiLaravel\DataType;
-use Juddling\OpenApiLaravel\Parsers\OpenApiParser;
-use Juddling\OpenApiLaravel\Parsers\SwaggerParser;
+use Juddling\Parserator\DataType;
+use Juddling\Parserator\Parsers\OpenApiParser;
+use Juddling\Parserator\Parsers\SwaggerParser;
 use PHPUnit\Framework\TestCase;
 
 class ParseSpecTest extends TestCase

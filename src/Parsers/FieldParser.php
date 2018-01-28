@@ -1,9 +1,9 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Parsers;
+namespace Juddling\Parserator\Parsers;
 
-use Juddling\OpenApiLaravel\DataType;
-use Juddling\OpenApiLaravel\Field;
+use Juddling\Parserator\DataType;
+use Juddling\Parserator\Field;
 
 /*
  * Parses data types for a the fields on a model

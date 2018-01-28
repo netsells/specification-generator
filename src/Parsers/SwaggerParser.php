@@ -1,6 +1,6 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Parsers;
+namespace Juddling\Parserator\Parsers;
 
 class SwaggerParser extends SpecificationParser
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Commands;
+namespace Juddling\Parserator\Commands;
 
 use Illuminate\Console\Command;
-use Juddling\OpenApiLaravel\Generators\MigrationGenerator;
-use Juddling\OpenApiLaravel\Parsers\SwaggerParser;
+use Juddling\Parserator\Generators\MigrationGenerator;
+use Juddling\Parserator\Parsers\SwaggerParser;
 
 class SwaggerGenerateCommand extends Command
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Juddling\OpenApiLaravel;
+namespace Juddling\Parserator;
 
 use MyCLabs\Enum\Enum;
 

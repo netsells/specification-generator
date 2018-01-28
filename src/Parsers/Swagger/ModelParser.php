@@ -1,8 +1,8 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Parsers\Swagger;
+namespace Juddling\Parserator\Parsers\Swagger;
 
-class ModelParser extends \Juddling\OpenApiLaravel\Parsers\ModelParser
+class ModelParser extends \Juddling\Parserator\Parsers\ModelParser
 {
     public static function models(array $definitions)
     {

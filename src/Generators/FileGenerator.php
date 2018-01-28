@@ -1,6 +1,6 @@
 <?php
 
-namespace Juddling\OpenApiLaravel\Generators;
+namespace Juddling\Parserator\Generators;
 
 interface FileGenerator
 {

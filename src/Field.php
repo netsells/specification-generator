@@ -1,6 +1,6 @@
 <?php
 
-namespace Juddling\OpenApiLaravel;
+namespace Juddling\Parserator;
 
 class Field
 {

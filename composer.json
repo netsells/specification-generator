@@ -27,18 +27,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Juddling\\OpenApiLaravel\\": "src"
+            "Juddling\\Parserator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Juddling\\OpenApiLaravel\\Tests\\": "tests"
+            "Juddling\\Parserator\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Juddling\\OpenApiLaravel\\GeneratorServiceProvider"
+                "Juddling\\Parserator\\GeneratorServiceProvider"
             ]
         }
     },
