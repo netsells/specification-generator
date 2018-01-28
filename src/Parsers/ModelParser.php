@@ -34,6 +34,10 @@ class ModelParser
             return $this->allOfModel();
         }
 
+        if (!array_key_exists('properties', $this->spec)) {
+            return $this->singleField();
+        }
+
         $fields = $this->parseFields($this->spec['properties']);
         return new Model($this->name, $fields);
     }
@@ -95,5 +99,14 @@ class ModelParser
     {
         $referencedModelName = SwaggerParser::modelNameFromRef($reference);
         return $this->findParsedModel($referencedModelName);
+    }
+
+    /*
+     * Definition is just a single field
+     */
+    private function singleField()
+    {
+        $parser = new FieldParser(null, $this->spec, $this);
+        return new Model($this->name, [$parser->parse()]);
     }
 }

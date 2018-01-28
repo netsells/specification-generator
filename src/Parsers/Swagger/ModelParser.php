@@ -17,15 +17,13 @@ class ModelParser extends \Juddling\Parserator\Parsers\ModelParser
             $name = $queue->pop();
             $specification = $definitions[$name];
 
-            if ($specification['type'] === 'object') {
-                try {
-                    $model = (new self($name, $specification, $evaluated))->parse();
-                    $evaluated[] = $model;
-                } catch (UnparsedReferenceException $e) {
-                    // this model references another model we haven't parsed yet
-                    // add it back on the queue and try again later!
-                    $queue->push($name);
-                }
+            try {
+                $model = (new self($name, $specification, $evaluated))->parse();
+                $evaluated[] = $model;
+            } catch (UnparsedReferenceException $e) {
+                // this model references another model we haven't parsed yet
+                // add it back on the queue and try again later!
+                $queue->push($name);
             }
         }
 
