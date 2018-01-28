@@ -17,7 +17,7 @@ class SwaggerParser extends SpecificationParser
     /*
      * delegate to model parser to get model instances
      */
-    protected function parseModels($schemas): \Generator
+    protected function parseModels($schemas): iterable
     {
         $modelParser = $this->getModelParser();
         return $modelParser::models($schemas);

@@ -25,13 +25,18 @@ abstract class SpecificationParser
     public function models(): array
     {
         $models = $this->parseModels($this->getModelsFromSpecification());
-        return iterator_to_array($models);
+
+        if ($models instanceof \Traversable) {
+            return iterator_to_array($models);
+        }
+
+        return $models;
     }
 
     /*
      * delegate to model parser to get model instances
      */
-    protected function parseModels($schemas): \Generator
+    protected function parseModels($schemas): iterable
     {
         $modelParser = $this->getModelParser();
         foreach ($schemas as $modelName => $modelSpec) {

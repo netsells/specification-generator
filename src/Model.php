@@ -10,7 +10,7 @@ class Model
     public function __construct($name, $fields)
     {
         $this->name = $name;
-        $this->fields = $fields;
+        $this->fields = $fields instanceof \Traversable ? iterator_to_array($fields) : $fields;
     }
 
     /**

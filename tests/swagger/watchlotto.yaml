@@ -272,6 +272,7 @@ definitions:
         type: string
         example: game-starting-soon
       value:
+        type: string
         example: true
   Card:
     description: A stripe card

@@ -2,6 +2,7 @@
 
 namespace Juddling\Parserator\Parsers;
 
+use Juddling\Parserator\Exceptions\MissingReferenceException;
 use Juddling\Parserator\Model;
 
 class ModelParser
@@ -17,20 +18,48 @@ class ModelParser
 
     public function parse()
     {
+        // combine a reference and properties if allOf is used
+        if (array_key_exists('allOf', $this->spec)) {
+            return $this->allOfModel();
+        }
+
         $fields = $this->parseFields($this->spec['properties']);
         return new Model($this->name, $fields);
+    }
+
+    public static function modelNameFromRef($reference): string
+    {
+        $startingIndex = strlen('#/definitions/');
+        return substr($reference, $startingIndex);
     }
 
     private function parseFields($fields)
     {
         foreach ($fields as $fieldName => $fieldSpec) {
             $parser = new FieldParser($fieldName, $fieldSpec);
-
-            if (!array_key_exists('type', $fieldSpec)) {
-                continue;
-            }
-
             yield $parser->parse();
         }
+    }
+
+    private function allOfModel(): Model
+    {
+        $allOf = $this->spec['allOf'];
+        $fields = [];
+
+        // each is either a $ref, or properties
+        foreach ($allOf as $complexFieldSpec) {
+            if (array_key_exists('properties', $complexFieldSpec)) {
+                $parsedFields = $this->parseFields($complexFieldSpec['properties']);
+                return new Model($this->name, $parsedFields);
+            }
+
+            if (!array_key_exists('$ref', $complexFieldSpec)) {
+                throw new MissingReferenceException("allOf has been used, but no reference has been provided in definition: {$this->name}");
+            }
+
+            $referencedModelName = self::modelNameFromRef($complexFieldSpec['$ref']);
+        }
+
+        return new Model($this->name, $fields);
     }
 }
