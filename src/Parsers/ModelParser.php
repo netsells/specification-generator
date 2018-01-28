@@ -15,6 +15,10 @@ class ModelParser
      * other Definitions
      */
     private $parsedDefinitions;
+    /*
+     * Parsed fields of the current Model
+     */
+    private $parsedFields = [];
 
     public function __construct($name, array $spec, $parsedDefinitions)
     {
@@ -53,12 +57,11 @@ class ModelParser
     private function allOfModel(): Model
     {
         $allOf = $this->spec['allOf'];
-        $fields = [];
 
         // each is either a $ref, or properties
         foreach ($allOf as $complexFieldSpec) {
             if (array_key_exists('properties', $complexFieldSpec)) {
-                $fields[] = $this->parseFields($complexFieldSpec['properties']);
+                $this->addFields($this->parseFields($complexFieldSpec['properties']));
                 continue;
             }
 
@@ -67,10 +70,20 @@ class ModelParser
             }
 
             $referencedModelName = self::modelNameFromRef($complexFieldSpec['$ref']);
-            $fields[] = $this->fieldsForModel($referencedModelName);
+            $this->addFields($this->fieldsForModel($referencedModelName));
         }
 
-        return new Model($this->name, $fields);
+        return new Model($this->name, $this->parsedFields);
+    }
+
+    /*
+     * Adds a set of fields to the current model's fields
+     */
+    private function addFields(array $fields)
+    {
+        foreach ($fields as $field) {
+            $this->parsedFields[] = $field;
+        }
     }
 
     private function fieldsForModel($referencedModelName)
