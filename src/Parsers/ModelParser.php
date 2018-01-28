@@ -107,6 +107,8 @@ class ModelParser
     private function singleField()
     {
         $parser = new FieldParser(null, $this->spec, $this);
-        return new Model($this->name, [$parser->parse()]);
+        $model = new Model($this->name, [$parser->parse()]);
+        $model->markAsSingleField();
+        return $model;
     }
 }
