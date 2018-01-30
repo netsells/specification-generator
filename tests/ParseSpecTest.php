@@ -93,5 +93,17 @@ class ParseSpecTest extends TestCase
         $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto-2.yaml');
         $models = $parser->models();
         $this->assertContainsOnlyInstancesOf(Model::class, $models);
+
+        foreach ($models as $model) {
+            $this->assertContainsOnlyInstancesOf(Field::class, $model->getFields());
+
+            switch ($model->getName()) {
+                case 'Play':
+                    $fields = $model->getFields();
+                    $this->assertFieldsContainsField(new Field('spot_x', DataType::INTEGER()), $fields);
+                    $this->assertFieldsContainsField(new Field('spot_y', DataType::INTEGER()), $fields);
+                    break;
+            }
+        }
     }
 }

@@ -42,14 +42,20 @@ class ModelParser
         return new Model($this->name, $fields);
     }
 
-    private function parseFields($fields)
+    private function parseFields($fields, $prefixFieldName = '')
     {
-        $parsedFields = [];
         foreach ($fields as $fieldName => $fieldSpec) {
-            $parser = new FieldParser($fieldName, $fieldSpec, $this);
-            $parsedFields[] = $parser->parse();
+            // flatten complex definitions into a set of fields
+            if ($this->isNestedObject($fieldSpec)) {
+                $this->parseFields($fieldSpec['properties'], $prefixFieldName . "{$fieldName}_");
+                continue;
+            }
+
+            $parser = new FieldParser($prefixFieldName . $fieldName, $fieldSpec, $this);
+            $this->parsedFields[] = $parser->parse();
         }
-        return $parsedFields;
+
+        return $this->parsedFields;
     }
 
     private function allOfModel(): Model
@@ -112,5 +118,15 @@ class ModelParser
         $model = new Model($this->name, [$parser->parse()]);
         $model->markAsSingleField();
         return $model;
+    }
+
+    /**
+     * @param $fieldSpec
+     * @return bool
+     */
+    private function isNestedObject($fieldSpec): bool
+    {
+        return array_key_exists('type', $fieldSpec) && $fieldSpec['type'] === 'object'
+            && array_key_exists('properties', $fieldSpec);
     }
 }
