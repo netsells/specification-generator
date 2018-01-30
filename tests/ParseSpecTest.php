@@ -8,6 +8,7 @@ use Juddling\Parserator\Model;
 use Juddling\Parserator\Parsers\OpenApiParser;
 use Juddling\Parserator\Parsers\Swagger\ModelParser;
 use Juddling\Parserator\Parsers\SwaggerParser;
+use League\BooBoo\Formatter\CommandLineFormatter;
 use PHPUnit\Framework\TestCase;
 
 class ParseSpecTest extends TestCase
@@ -85,5 +86,12 @@ class ParseSpecTest extends TestCase
         }
 
         $this->fail('Could not find field with name: ' . $x->getName() . ' and type: ' . $x->getType());
+    }
+
+    public function testSwaggerComplexSpec()
+    {
+        $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto-2.yaml');
+        $models = $parser->models();
+        $this->assertContainsOnlyInstancesOf(Model::class, $models);
     }
 }

@@ -4,15 +4,18 @@ namespace Juddling\Parserator\Parsers;
 
 use Juddling\Parserator\DataType;
 use Juddling\Parserator\Field;
+use Juddling\Parserator\ModelField;
 
 /*
  * Parses data types for a the fields on a model
  */
+
 class FieldParser
 {
     private $spec;
     private $name;
     private $modelParser;
+    private $referencedModel;
 
     public function __construct($name, array $spec, ModelParser $modelParser)
     {
@@ -23,6 +26,10 @@ class FieldParser
 
     public function parse(): Field
     {
+        if ($this->isModelField()) {
+            return new ModelField($this->name, $this->referencedModel);
+        }
+
         return new Field($this->name, $this->getType());
     }
 
@@ -48,5 +55,19 @@ class FieldParser
         }
 
         return new DataType($this->spec['type']);
+    }
+
+    /*
+     * This is not a good way of testing for a model field,
+     * better way is to make sure we are not parsing from within an allOf
+     */
+    private function isModelField(): bool
+    {
+        if (!$this->isReference()) {
+            return false;
+        }
+
+        $this->referencedModel = $this->modelParser->getModelFromReference($this->spec['$ref']);
+        return count($this->referencedModel->getFields()) > 1;
     }
 }
