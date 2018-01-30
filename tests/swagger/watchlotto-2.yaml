@@ -479,7 +479,15 @@ definitions:
         example: '25154843-3bae-4028-a9f5-daca753e49ff'
       watch:
         $ref: '#/definitions/Watch'
-
+      spot:
+        type: object
+        properties:
+          x:
+            type: integer
+            example: 124
+          y:
+            type: integer
+            example: 59
   Transaction:
     description: A transaction
     type: object
