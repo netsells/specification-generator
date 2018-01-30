@@ -40,7 +40,8 @@ class FieldParser
             $model = $this->modelParser->getModelFromReference($this->spec['$ref']);
 
             if (count($model->getFields()) > 1) {
-                throw new \RuntimeException("Can't get the type if there is more than a single field");
+                throw new \RuntimeException("Can't get the type if there is more than a single field, field named: " .
+                    "{$this->name} is referencing model: {$model->getName()}");
             }
 
             return $model->getFields()[0]->getType();
