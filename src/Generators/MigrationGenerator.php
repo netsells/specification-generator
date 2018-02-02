@@ -13,7 +13,7 @@ class MigrationGenerator implements FileGenerator
     public function __construct(Model $model)
     {
         $this->model = $model;
-        $tableName = $this->tableName();
+        $tableName = $this->model->tableName();
         $migrationName = "create_{$tableName}_table";
         $this->builder = new MigrationBuilder(iterator_to_array($this->columns()), $migrationName, $tableName);
     }
@@ -28,19 +28,10 @@ class MigrationGenerator implements FileGenerator
         return $this->builder->fileName();
     }
 
-    private function tableName()
-    {
-        return snake_case(str_plural($this->model->getName()));
-    }
-
     private function columns()
     {
         foreach ($this->model->getFields() as $field) {
-            yield [
-                'name' => $field->getName(),
-                'type' => $field->getType()->getValue(),
-                'nullable' => false
-            ];
+            yield $field->toMigration();
         }
     }
 }

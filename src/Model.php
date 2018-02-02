@@ -51,4 +51,12 @@ class Model
     {
         return $this->referenced;
     }
+
+    /*
+     * database table name
+     */
+    public function tableName(): string
+    {
+        return snake_case(str_plural($this->getName()));
+    }
 }

@@ -23,4 +23,16 @@ class Field
     {
         return $this->name;
     }
+
+    /*
+     * A representation of the field which is passed to the migration generator
+     */
+    public function toMigration(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'type' => $this->getType()->getValue(),
+            'nullable' => false
+        ];
+    }
 }

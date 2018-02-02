@@ -41,4 +41,23 @@ class GenerateMigrationTest extends TestCase
             }
         }
     }
+
+    public function testForeignKey()
+    {
+        $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto-2.yaml');
+        $models = $parser->models();
+
+        foreach ($models as $model) {
+            switch ($model->getName()) {
+                case 'Order':
+                    $generator = new MigrationGenerator($model);
+                    $migration = $generator->generate();
+
+                    $this->assertContains('$table->integer(\'transaction_id\')', $migration);
+                    $this->assertContains('$table->foreign(\'transaction_id\')', $migration);
+
+                    break;
+            }
+        }
+    }
 }
