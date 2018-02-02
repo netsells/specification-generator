@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/netsells/specification-generator.svg?token=GmksR3KUgtNPYizjuqqy&branch=master)](https://travis-ci.com/netsells/specification-generator)
+
 ## Installation
 
 ```
