@@ -22,7 +22,7 @@ class ParseSpecTest extends TestCase
     public function testSwaggerSpec()
     {
         $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto.yaml');
-        $models = $parser->models();
+        $models = $parser->migrationModels();
         $this->assertContainsOnlyInstancesOf(Model::class, $models);
         // should really be five models, however looking at the spec, there is no way for me
         // to determine that RegistrationUser, shouldn't be a database table
@@ -87,6 +87,14 @@ class ParseSpecTest extends TestCase
                     $fields = $model->getFields();
                     $this->assertFieldsContainsField(new Field('spot_x', DataType::INTEGER()), $fields);
                     $this->assertFieldsContainsField(new Field('spot_y', DataType::INTEGER()), $fields);
+                    break;
+                case 'BasicUser':
+                    $fields = $model->getFields();
+                    $this->assertCount(5, $fields);
+                    break;
+                case 'Name':
+                    $fields = $model->getFields();
+                    $this->assertCount(2, $fields);
                     break;
                 case 'User':
                     $fields = $model->getFields();

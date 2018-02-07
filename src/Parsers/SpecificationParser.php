@@ -33,6 +33,16 @@ abstract class SpecificationParser
         return $models;
     }
 
+    /**
+     * @return Model[]
+     */
+    public function migrationModels(): array
+    {
+        return array_filter($this->models(), function ($model) {
+            return !$model->isSingleField() && !$model->isReferenced();
+        });
+    }
+
     /*
      * delegate to model parser to get model instances
      */

@@ -15,7 +15,7 @@ class SwaggerGenerateCommand extends Command
     public function handle()
     {
         $this->parser = new SwaggerParser($this->argument('file'));
-        $models = $this->parser->models();
+        $models = $this->parser->migrationModels();
 
         $this->writeMigrations($models);
     }
