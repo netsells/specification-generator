@@ -88,6 +88,10 @@ class ParseSpecTest extends TestCase
                     $this->assertFieldsContainsField(new Field('spot_x', DataType::INTEGER()), $fields);
                     $this->assertFieldsContainsField(new Field('spot_y', DataType::INTEGER()), $fields);
                     break;
+                case 'User':
+                    $fields = $model->getFields();
+                    $this->assertCount(6, $fields);
+                    break;
             }
         }
     }
