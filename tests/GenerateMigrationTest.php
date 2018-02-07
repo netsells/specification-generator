@@ -60,4 +60,23 @@ class GenerateMigrationTest extends TestCase
             }
         }
     }
+
+    public function testEnumMigration()
+    {
+        $parser = new SwaggerParser(__DIR__ . '/swagger/watchlotto-2.yaml');
+        $models = $parser->models();
+
+        foreach ($models as $model) {
+            switch ($model->getName()) {
+                case 'Transaction':
+                    $generator = new MigrationGenerator($model);
+                    $migration = $generator->generate();
+
+                    $this->assertContains('$table->enum(\'name\', [\'card\', \'paypal\', \'applepay\'])', $migration);
+                    $this->assertContains('Schema::create(\'transactions\'', $migration);
+
+                    break;
+            }
+        }
+    }
 }
