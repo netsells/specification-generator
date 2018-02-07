@@ -44,18 +44,20 @@ class ModelParser
 
     private function parseFields($fields, $prefixFieldName = '')
     {
+        $parsedFields = [];
+
         foreach ($fields as $fieldName => $fieldSpec) {
             // flatten complex definitions into a set of fields
             if ($this->isNestedObject($fieldSpec)) {
-                $this->parseFields($fieldSpec['properties'], $prefixFieldName . "{$fieldName}_");
+                $parsedFields = array_merge($parsedFields, $this->parseFields($fieldSpec['properties'], $prefixFieldName . "{$fieldName}_"));
                 continue;
             }
 
             $parser = new FieldParser($prefixFieldName . $fieldName, $fieldSpec, $this);
-            $this->parsedFields[] = $parser->parse();
+            $parsedFields[] = $parser->parse();
         }
 
-        return $this->parsedFields;
+        return $parsedFields;
     }
 
     private function allOfModel(): Model
