@@ -4,5 +4,10 @@ namespace Juddling\Parserator\Generators;
 
 interface FileGenerator
 {
-    public function generate();
+    /*
+     * Returns content of the file
+     */
+    public function generate(): string;
+
+    public function fileName(): string;
 }

@@ -18,12 +18,12 @@ class MigrationGenerator implements FileGenerator
         $this->builder = new MigrationBuilder(iterator_to_array($this->columns()), $migrationName, $tableName);
     }
 
-    public function generate()
+    public function generate(): string
     {
         return $this->builder->generate();
     }
 
-    public function fileName()
+    public function fileName(): string
     {
         return $this->builder->fileName();
     }
