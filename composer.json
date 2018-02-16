@@ -46,7 +46,7 @@
     "scripts": {
         "cs": "phpcs --standard=psr2 src/ tests/",
         "csfix": "phpcbf --standard=psr2 src/ tests/",
-        "test": "phpunit"
+        "test": "php vendor/bin/phpunit"
     },
     "prefer-stable": true,
     "minimum-stability": "dev"
