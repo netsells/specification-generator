@@ -3,6 +3,8 @@
 namespace Juddling\Parserator\Parsers;
 
 use Juddling\Parserator\DataType;
+use Juddling\Parserator\Exceptions\ParsingException;
+use Juddling\Parserator\Exceptions\UnsupportedTypeException;
 use Juddling\Parserator\Field;
 use Juddling\Parserator\ModelField;
 
@@ -54,7 +56,15 @@ class FieldParser
             return $model->getFields()[0]->getType();
         }
 
-        return new DataType($this->spec['type']);
+        if (!array_key_exists('type', $this->spec)) {
+            throw new ParsingException("No type property defined on Field: {$this->name}");
+        }
+
+        try {
+            return new DataType($this->spec['type']);
+        } catch (\UnexpectedValueException $e) {
+            throw new UnsupportedTypeException($e->getMessage());
+        }
     }
 
     /*
