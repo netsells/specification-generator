@@ -4,6 +4,7 @@ namespace Juddling\Parserator\Parsers;
 
 use Juddling\Parserator\Exceptions\MissingReferenceException;
 use Juddling\Parserator\Exceptions\UnparsedReferenceException;
+use Juddling\Parserator\Exceptions\UnsupportedTypeException;
 use Juddling\Parserator\Model;
 
 class ModelParser
@@ -53,8 +54,12 @@ class ModelParser
                 continue;
             }
 
-            $parser = new FieldParser($prefixFieldName . $fieldName, $fieldSpec, $this);
-            $parsedFields[] = $parser->parse();
+            try {
+                $parser = new FieldParser($prefixFieldName . $fieldName, $fieldSpec, $this);
+                $parsedFields[] = $parser->parse();
+            } catch (UnsupportedTypeException $e) {
+                // skip parsing fields of unsupported types
+            }
         }
 
         return $parsedFields;
