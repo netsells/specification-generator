@@ -16,7 +16,7 @@ abstract class SpecificationParser
     public function __construct($file)
     {
         $this->file = $file;
-        $this->spec = Yaml::parseFile($this->file);
+        $this->spec = $this->parseFile();
     }
 
     /**
@@ -52,5 +52,15 @@ abstract class SpecificationParser
         foreach ($schemas as $modelName => $modelSpec) {
             yield (new $modelParser($modelName, $modelSpec, []))->parse();
         }
+    }
+
+    private function parseFile()
+    {
+        // only exists in version 3.4+ of Symfony YAML
+        if (method_exists(Yaml::class, 'parseFile')) {
+            return Yaml::parseFile($this->file);
+        }
+
+        return Yaml::parse(file_get_contents($this->file));
     }
 }
